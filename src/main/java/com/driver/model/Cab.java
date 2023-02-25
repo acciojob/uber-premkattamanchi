@@ -34,7 +34,7 @@ public class Cab{
         this.perKmRate = perKmRate;
     }
 
-    public boolean isAvailbale() {
+    public boolean getAvailbale() {
         return availbale;
     }
 

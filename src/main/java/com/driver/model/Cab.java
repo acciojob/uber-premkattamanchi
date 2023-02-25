@@ -1,7 +1,6 @@
 package com.driver.model;
 
 import javax.persistence.*;
-import com.driver.model.Driver;
 
 @Entity
 @Table(name = "cabs")
@@ -10,7 +9,7 @@ public class Cab{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private int perKmRate;
-    private boolean availbale;
+    private boolean available;
     @OneToOne
     @JoinColumn
     private Driver driver;
@@ -34,12 +33,12 @@ public class Cab{
         this.perKmRate = perKmRate;
     }
 
-    public boolean getAvailbale() {
-        return availbale;
+    public boolean getAvailable() {
+        return available;
     }
 
-    public void setAvailbale(java.lang.Boolean availbale) {
-        this.availbale = availbale;
+    public void setAvailable(boolean available) {
+        this.available = available;
     }
 
     public Driver getDriver() {

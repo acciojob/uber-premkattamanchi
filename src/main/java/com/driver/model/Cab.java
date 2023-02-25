@@ -38,7 +38,7 @@ public class Cab{
         return availbale;
     }
 
-    public void setAvailbale(boolean availbale) {
+    public void setAvailbale(java.lang.Boolean availbale) {
         this.availbale = availbale;
     }
 

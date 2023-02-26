@@ -58,7 +58,13 @@ public class CustomerServiceImpl implements CustomerService {
 		}
 
 		Driver driver=driverRepository2.findById(driverId).get();
-		Customer customer=customerRepository2.findById(customerId).get();
+		Customer customer;
+		try{
+			customer=customerRepository2.findById(customerId).get();
+		}
+		catch(Exception e){
+			throw new Exception("No customer available");
+		}
 		int costPerKm=driver.getCab().getPerKmRate();
 		int bill=costPerKm*distanceInKm;
 

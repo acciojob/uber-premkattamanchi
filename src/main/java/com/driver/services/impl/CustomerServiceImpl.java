@@ -61,31 +61,33 @@ public class CustomerServiceImpl implements CustomerService {
 			    break;
 		   }
 		}
-		if(driverId==0 || found==false){
+		if(driverId==0){
 			throw new Exception("No cab available!");
 		}
-
-		Driver driver=driverRepository2.findById(driverId).get();
-		Customer customer=customerRepository2.findById(customerId).get();
-		int costPerKm=driver.getCab().getPerKmRate();
-		int bill=costPerKm*distanceInKm;
-
-		//setting TripBooking entity
 		TripBooking tripBooking=new TripBooking();
-		tripBooking.setFromLocation(fromLocation);
-		tripBooking.setToLocation(toLocation);
-		tripBooking.setDistanceInKm(distanceInKm);
-		tripBooking.setBill(bill);
-		tripBooking.setStatus(TripStatus.CONFIRMED);
-		tripBooking.setCustomer(customer);
-		tripBooking.setDriver(driver);
+        if(found==true && driverId!=0){
+			Driver driver=driverRepository2.findById(driverId).get();
+			Customer customer=customerRepository2.findById(customerId).get();
+			int costPerKm=driver.getCab().getPerKmRate();
+			int bill=costPerKm*distanceInKm;
 
-		//adding in Customer tripBookingList
-		customer.getTripBookingList().add(tripBooking);
-		//adding in Driver tripBookingList
-		driver.getTripBookingList().add(tripBooking);
+			//setting TripBooking entity
+			tripBooking.setFromLocation(fromLocation);
+			tripBooking.setToLocation(toLocation);
+			tripBooking.setDistanceInKm(distanceInKm);
+			tripBooking.setBill(bill);
+			tripBooking.setStatus(TripStatus.CONFIRMED);
+			tripBooking.setCustomer(customer);
+			tripBooking.setDriver(driver);
 
-		tripBookingRepository2.save(tripBooking);
+			//adding in Customer tripBookingList
+			customer.getTripBookingList().add(tripBooking);
+			//adding in Driver tripBookingList
+			driver.getTripBookingList().add(tripBooking);
+
+			tripBookingRepository2.save(tripBooking);
+
+		}
 
 		return tripBooking;
 	}
@@ -97,6 +99,7 @@ public class CustomerServiceImpl implements CustomerService {
 		tripBooking.setStatus(TripStatus.CANCELED);
 		tripBooking.setBill(0);
 		tripBooking.getDriver().getCab().setAvailable(true);//makimg cab available for other users
+		tripBookingRepository2.save(tripBooking);
 	}
 
 	@Override
@@ -105,5 +108,6 @@ public class CustomerServiceImpl implements CustomerService {
 		TripBooking tripBooking=tripBookingRepository2.findById(tripId).get();
 		tripBooking.setStatus(TripStatus.COMPLETED);
 		tripBooking.getDriver().getCab().setAvailable(true);
+		tripBookingRepository2.save(tripBooking);
 	}
 }

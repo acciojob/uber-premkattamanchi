@@ -44,19 +44,27 @@ public class CustomerServiceImpl implements CustomerService {
 	public TripBooking bookTrip(int customerId, String fromLocation, String toLocation, int distanceInKm) throws Exception{
 		//Book the driver with lowest driverId who is free (cab available variable is Boolean.TRUE). If no driver is available, throw "No cab available!" exception
 		//Avoid using SQL query
-		List<Driver> driverList=driverRepository2.findAll();
-		int driverId=0;
-		for(Driver driver:driverList) {
-			if (driver.getCab().getAvailable() == true) {
-				driverId = driver.getDriverId();
-				driver.getCab().setAvailable(false);
-				break;
+		Driver driver = null;
+
+		//1. Do the basic conditions filter
+
+		List<Driver> allDrivers = driverRepository2.findAll();
+//		if(allDrivers == null){
+//			throw new Exception("No cab available!");
+//		}
+
+		for(Driver driver1: allDrivers){
+
+			//Finding if they are available or not
+			if(driver1.getCab().getAvailable() == true) {
+				if((driver == null) || (driver.getDriverId() > driver1.getDriverId())){
+					driver = driver1;
+				}
 			}
 		}
-		if(driverId==0){
+		if(driver == null){
 			throw new Exception("No cab available!");
 		}
-			Driver driver=driverRepository2.findById(driverId).get();
 		    Customer customer=customerRepository2.findById(customerId).get();
 			int costPerKm=driver.getCab().getPerKmRate();
 			int bill=costPerKm*distanceInKm;

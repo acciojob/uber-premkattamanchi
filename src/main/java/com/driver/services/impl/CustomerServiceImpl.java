@@ -65,9 +65,16 @@ public class CustomerServiceImpl implements CustomerService {
 			throw new Exception("No cab available!");
 		}
 		TripBooking tripBooking=new TripBooking();
-        if(found==true && driverId!=0){
-			Driver driver=driverRepository2.findById(driverId).get();
-			Customer customer=customerRepository2.findById(customerId).get();
+		Driver driver=new Driver();
+		Customer customer=new Customer();
+		try{
+			driver=driverRepository2.findById(driverId).get();
+			customer=customerRepository2.findById(customerId).get();
+		}
+		catch(Exception e){
+			throw new Exception("customer not found");
+		}
+
 			int costPerKm=driver.getCab().getPerKmRate();
 			int bill=costPerKm*distanceInKm;
 
@@ -87,7 +94,6 @@ public class CustomerServiceImpl implements CustomerService {
 
 			tripBookingRepository2.save(tripBooking);
 
-		}
 
 		return tripBooking;
 	}

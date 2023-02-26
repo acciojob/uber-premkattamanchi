@@ -46,25 +46,27 @@ public class CustomerServiceImpl implements CustomerService {
 		//Avoid using SQL query
 		List<Driver> driverList=driverRepository2.findAll();
 		int driverId=0;
-		for(Driver driver:driverList){
-			if(driver.getCab().getAvailable()==true){
-				driverId=driver.getDriverId();
+		for(Driver driver:driverList) {
+			if (driver.getCab().getAvailable() == true) {
+				driverId = driver.getDriverId();
 				driver.getCab().setAvailable(false);
 				break;
 			}
 		}
-		if(driverId==0){
+		List<Customer> customerList=customerRepository2.findAll();
+		boolean found=false;
+		for(Customer customer:customerList) {
+			if (customer.getCustomerId() == customerId){
+				found = true;
+			    break;
+		   }
+		}
+		if(driverId==0 || found==false){
 			throw new Exception("No cab available!");
 		}
 
 		Driver driver=driverRepository2.findById(driverId).get();
-		Customer customer;
-		try{
-			customer=customerRepository2.findById(customerId).get();
-		}
-		catch(Exception e){
-			throw new Exception("No customer available");
-		}
+		Customer customer=customerRepository2.findById(customerId).get();
 		int costPerKm=driver.getCab().getPerKmRate();
 		int bill=costPerKm*distanceInKm;
 

@@ -65,16 +65,10 @@ public class CustomerServiceImpl implements CustomerService {
 			throw new Exception("No cab available!");
 		}
 		TripBooking tripBooking=new TripBooking();
-		Driver driver=new Driver();
-		Customer customer=new Customer();
-		try{
-			driver=driverRepository2.findById(driverId).get();
-			customer=customerRepository2.findById(customerId).get();
-		}
-		catch(Exception e){
-			throw new Exception("customer not found");
-		}
-
+			Driver driver=driverRepository2.findById(driverId).get();
+			if(found==false)
+				return tripBooking;
+			Customer customer=customerRepository2.findById(customerId).get();
 			int costPerKm=driver.getCab().getPerKmRate();
 			int bill=costPerKm*distanceInKm;
 

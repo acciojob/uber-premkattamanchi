@@ -31,14 +31,12 @@ public class DriverServiceImpl implements DriverService {
 	   cab.setDriver(driver);
 
 	   driverRepository3.save(driver);
-	   cabRepository3.save(cab);
 	}
 
 	@Override
 	public void removeDriver(int driverId){
 		// Delete driver without using deleteById function
 		int cabId=driverRepository3.findById(driverId).get().getCab().getId();
-		cabRepository3.deleteById(cabId);
 		driverRepository3.deleteById(driverId);
 	}
 

@@ -18,7 +18,7 @@ public class Driver{
     private String mobile;
     private String password;
 
-    @OneToOne //(mappedBy = "driver",cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "driver",cascade = CascadeType.ALL)
     @JoinColumn
     @JsonIgnore
     private Cab cab;

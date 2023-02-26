@@ -53,26 +53,16 @@ public class CustomerServiceImpl implements CustomerService {
 				break;
 			}
 		}
-		List<Customer> customerList=customerRepository2.findAll();
-		boolean found=false;
-		for(Customer customer:customerList) {
-			if (customer.getCustomerId() == customerId){
-				found = true;
-			    break;
-		   }
-		}
 		if(driverId==0){
 			throw new Exception("No cab available!");
 		}
-		TripBooking tripBooking=new TripBooking();
 			Driver driver=driverRepository2.findById(driverId).get();
-			if(found==false)
-				return tripBooking;
-			Customer customer=customerRepository2.findById(customerId).get();
+		    Customer customer=customerRepository2.findById(customerId).get();
 			int costPerKm=driver.getCab().getPerKmRate();
 			int bill=costPerKm*distanceInKm;
 
 			//setting TripBooking entity
+		    TripBooking tripBooking=new TripBooking();
 			tripBooking.setFromLocation(fromLocation);
 			tripBooking.setToLocation(toLocation);
 			tripBooking.setDistanceInKm(distanceInKm);
@@ -83,13 +73,14 @@ public class CustomerServiceImpl implements CustomerService {
 
 			//adding in Customer tripBookingList
 			customer.getTripBookingList().add(tripBooking);
+			customerRepository2.save(customer);
 			//adding in Driver tripBookingList
 			driver.getTripBookingList().add(tripBooking);
+			driverRepository2.save(driver);
 
 			tripBookingRepository2.save(tripBooking);
 
-
-		return tripBooking;
+			return tripBooking;
 	}
 
 	@Override
